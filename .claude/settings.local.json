@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m pip install:*)",
+      "Bash(python:*)",
+      "Bash(py:*)",
+      "Bash(timeout /t 3)",
+      "Bash(powershell -command \"Get-Content ''logs/pumpfun_alerts.log'' -Tail 20\")",
+      "Bash(powershell:*)",
+      "Bash(dir:*)",
+      "Bash(timeout:*)",
+      "Bash(nul)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

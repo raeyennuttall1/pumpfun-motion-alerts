@@ -1,0 +1,65 @@
+# Pump.fun Motion Alert System Configuration
+
+api:
+  pumpfun_base_url: "https://client-api-2-74b1891ee9f9.herokuapp.com"
+  pumpfun_websocket: "wss://pumpportal.fun/api/data"
+  solana_rpc: "https://api.mainnet-beta.solana.com"  # Can use Helius/QuickNode for better performance
+
+database:
+  sqlite_path: "data/pumpfun_alerts.db"
+  echo_sql: false
+
+motion_alert:
+  # Alert trigger thresholds - TESTING MODE (very low thresholds)
+  min_buy_volume_sol: 0.1           # Minimum SOL volume in window
+  min_unique_buyers: 2               # Minimum unique buyers
+  min_buy_sell_ratio: 1.0           # Buys/sells ratio
+  min_txn_velocity: 1               # Transactions per minute
+  min_known_wallets: 0              # Known profitable wallets
+  max_market_cap: 1000000           # Maximum market cap (USD)
+  max_bonding_curve_pct: 95         # Maximum bonding curve fill %
+  min_time_since_launch: 10         # Minimum seconds since launch
+
+  # Time windows for feature calculation (minutes)
+  feature_windows:
+    - 1
+    - 3
+    - 5
+    - 10
+
+labeling:
+  # Time intervals to check future prices (minutes)
+  future_intervals:
+    - 1
+    - 5
+    - 15
+    - 30
+    - 60
+
+  # Profit thresholds for labeling
+  pump_thresholds:
+    small: 0.10   # 10% pump
+    medium: 0.25  # 25% pump
+    large: 0.50   # 50% pump
+
+wallet_intelligence:
+  # Criteria for "known profitable" wallets
+  min_trades: 5
+  min_win_rate: 0.40
+  min_total_pnl_sol: 5.0
+  lookback_days: 30
+
+data_collection:
+  # How many recent launches to monitor simultaneously
+  max_active_tokens: 100
+
+  # Data retention (days)
+  keep_transaction_data_days: 30
+  keep_snapshot_data_days: 30
+  keep_alert_data_days: 90
+
+logging:
+  level: "DEBUG"  # Changed to DEBUG to see raw messages
+  file: "logs/pumpfun_alerts.log"
+  rotation: "100 MB"
+  retention: "30 days"

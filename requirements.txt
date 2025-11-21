@@ -1,0 +1,29 @@
+# Core dependencies
+requests>=2.31.0
+websockets>=12.0
+aiohttp>=3.9.0
+asyncio>=3.4.3
+
+# Database
+sqlalchemy>=2.0.0
+alembic>=1.13.0
+
+# Data processing
+pandas>=2.1.0
+numpy>=1.24.0
+
+# ML/AI
+torch>=2.1.0
+scikit-learn>=1.3.0
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic>=2.5.0
+PyYAML>=6.0.1
+
+# Logging
+loguru>=0.7.0
+
+# Optional: Dashboard
+streamlit>=1.29.0
+plotly>=5.18.0
