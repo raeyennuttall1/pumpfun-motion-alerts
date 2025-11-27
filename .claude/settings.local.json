@@ -11,7 +11,13 @@
       "Bash(timeout:*)",
       "Bash(nul)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: Pump.fun Motion Alert System\n\nComplete trading system for detecting and analyzing trending memecoins on Pump.fun with ML capabilities.\n\nFeatures:\n- Real-time WebSocket monitoring\n- Motion detection with configurable thresholds\n- Wallet intelligence tracking\n- Outcome labeling and hit rate analysis\n- Deep neural network for pump prediction\n- Local SQLite database\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git config:*)",
+      "WebSearch",
+      "WebFetch(domain:docs.gmgn.ai)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:dev.to)"
     ],
     "deny": [],
     "ask": []

@@ -1,5 +1,6 @@
 # Pump.fun Motion Alert System
-
+command for live motion Feed: powershell -command "Get-Content 'logs/pumpfun_alerts.log' -Wait | Select-String -Pattern 'Token:|Buy Volume:|Unique Buyers:|MOTION ALERT'"
+command for live full Token Scan Feed: powershell -command "Select-String -Path 'logs/pumpfun_alerts.log' -Pattern 'MOTION ALERT TRIGGERED' -Context 0,15 | Select-Object -Last 3"
 A sophisticated real-time trading system for detecting and analyzing trending memecoins on Pump.fun. Uses machine learning to identify high-probability pump opportunities and calculate optimal entry signals.
 
 ## Features
@@ -445,5 +446,6 @@ For issues or questions, consult:
 ---
 
 **Happy trading! 🚀**
-#   p u m p f u n - m o t i o n - a l e r t s  
+#   p u m p f u n - m o t i o n - a l e r t s 
+ 
  

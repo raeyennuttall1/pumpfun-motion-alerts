@@ -99,6 +99,19 @@ class FeatureCalculator:
                 'graduated': False,
             })
 
+        # If price is 0, try to calculate from recent transactions
+        if features['current_price_sol'] == 0:
+            recent_txns = self.get_cached_transactions(mint_address, 1)  # Last 1 minute
+            if recent_txns:
+                # Get most recent buy transaction
+                buys = [t for t in recent_txns if t.get('is_buy')]
+                if buys:
+                    latest_buy = buys[-1]
+                    sol_amt = latest_buy.get('sol_amount', 0)
+                    token_amt = latest_buy.get('token_amount', 0)
+                    if token_amt > 0:
+                        features['current_price_sol'] = sol_amt / token_amt
+
         # Calculate features for each time window
         for window in time_windows:
             window_features = self._calculate_window_features(mint_address, window)
@@ -226,6 +239,31 @@ class FeatureCalculator:
                 derived['volume_momentum'] = (short_vol / short_window) / (long_vol / long_window)
             else:
                 derived['volume_momentum'] = 0
+
+        # Volume/Market Cap ratio (Tier 1 requirement)
+        # Calculate for 1 hour window
+        market_cap = features.get('current_market_cap', 0)
+
+        # Use longest window available or 60 minutes
+        volume_window = max(windows) if windows else 60
+        buy_volume_sol = features.get(f'buy_volume_sol_{volume_window}m', 0)
+
+        # Convert SOL volume to USD (approximate: 1 SOL = $100 for ratio calculation)
+        # For more accuracy, you'd fetch real-time SOL/USD price
+        SOL_PRICE_USD = 100  # Approximate - update with real price if needed
+        volume_usd = buy_volume_sol * SOL_PRICE_USD
+
+        # Scale to 1 hour if needed
+        if volume_window < 60:
+            volume_1h_usd = volume_usd * (60 / volume_window)
+        else:
+            volume_1h_usd = volume_usd
+
+        # Calculate ratio
+        if market_cap > 0:
+            derived['volume_mc_ratio_1h'] = volume_1h_usd / market_cap
+        else:
+            derived['volume_mc_ratio_1h'] = 0
 
         return derived
 

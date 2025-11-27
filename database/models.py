@@ -51,6 +51,11 @@ class TokenSnapshot(Base):
     volume_1m = Column(Float, default=0.0)
     volume_5m = Column(Float, default=0.0)
 
+    # Tier 1 screening metrics
+    top10_holders_pct = Column(Float, nullable=True)
+    volume_mc_ratio = Column(Float, nullable=True)
+    smart_wallet_count = Column(Integer, nullable=True)
+
     # Relationship
     token = relationship("TokenLaunch", back_populates="snapshots")
 

@@ -1,24 +1,31 @@
-# Pump.fun Motion Alert System Configuration
+# Hybrid Motion Alert System Configuration
+# pump.fun for real-time monitoring + GMGN for enrichment
 
 api:
+  # pump.fun - Real-time monitoring (no auth required)
   pumpfun_base_url: "https://client-api-2-74b1891ee9f9.herokuapp.com"
   pumpfun_websocket: "wss://pumpportal.fun/api/data"
-  solana_rpc: "https://api.mainnet-beta.solana.com"  # Can use Helius/QuickNode for better performance
+
+  # GMGN - Enrichment data for Tier 1 screening (no auth required)
+  gmgn_base_url: "https://gmgn.ai"
+
+  # Solana RPC - On-chain data (can use Helius/QuickNode for better performance)
+  solana_rpc: "https://api.mainnet-beta.solana.com"
 
 database:
-  sqlite_path: "data/pumpfun_alerts.db"
+  sqlite_path: "data/hybrid_alerts.db"
   echo_sql: false
 
 motion_alert:
-  # Alert trigger thresholds - TESTING MODE (very low thresholds)
-  min_buy_volume_sol: 0.1           # Minimum SOL volume in window
-  min_unique_buyers: 2               # Minimum unique buyers
-  min_buy_sell_ratio: 1.0           # Buys/sells ratio
-  min_txn_velocity: 1               # Transactions per minute
-  min_known_wallets: 0              # Known profitable wallets
-  max_market_cap: 1000000           # Maximum market cap (USD)
-  max_bonding_curve_pct: 95         # Maximum bonding curve fill %
-  min_time_since_launch: 10         # Minimum seconds since launch
+  # Alert trigger thresholds - PRODUCTION MODE (optimized for quality signals)
+  min_buy_volume_sol: 5.0           # Minimum 5 SOL volume (filters weak pumps)
+  min_unique_buyers: 10             # At least 10 unique buyers (real interest)
+  min_buy_sell_ratio: 1.5           # 1.5x more buys than sells (bullish momentum)
+  min_txn_velocity: 10              # 10+ transactions per minute (active trading)
+  min_known_wallets: 0              # Known profitable wallets (0 until we build data)
+  max_market_cap: 100000            # Max $100k market cap (early entry)
+  max_bonding_curve_pct: 60         # Max 60% bonding curve (room to grow)
+  min_time_since_launch: 30         # Min 30 seconds (avoid bot spam)
 
   # Time windows for feature calculation (minutes)
   feature_windows:
@@ -57,6 +64,39 @@ data_collection:
   keep_transaction_data_days: 30
   keep_snapshot_data_days: 30
   keep_alert_data_days: 90
+
+paper_trading:
+  # Paper trading simulation settings
+  position_size_sol: 1.0              # Simulated position size (1 SOL per trade)
+  take_profit_pct: 0.25               # Take profit at +25%
+  stop_loss_pct: 0.10                 # Stop loss at -10%
+  max_open_positions: 20              # Maximum concurrent positions
+  max_position_duration_minutes: 60   # Auto-close after 60 minutes
+
+tier1_screening:
+  # Tier 1 Alert Criteria - Premium quality signals
+  # All criteria must be met for alert to trigger
+
+  # Market cap range
+  min_market_cap: 25000               # Minimum $25k market cap
+  max_market_cap: 500000              # Maximum $500k market cap
+
+  # Smart money requirement
+  min_smart_wallets: 3                # At least 3 known profitable wallets (>60% win rate)
+
+  # Holder distribution
+  max_top10_holders_pct: 40.0         # Top 10 holders must own <40% of supply
+  min_holder_count: 100               # At least 100 unique holders
+
+  # Volume/Market Cap ratio (1 hour)
+  min_volume_mc_ratio: 0.5            # Minimum 0.5x (healthy but not pump-dumped)
+  max_volume_mc_ratio: 1.2            # Maximum 1.2x (avoid extreme volatility)
+
+  # Token maturity
+  min_active_minutes: 60              # Must be active for at least 1 hour
+
+  # Check frequency
+  check_interval_minutes: 1           # How often to run Tier 1 screening (fast mode)
 
 logging:
   level: "DEBUG"  # Changed to DEBUG to see raw messages
